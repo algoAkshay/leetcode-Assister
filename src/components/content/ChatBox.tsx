@@ -73,41 +73,108 @@ const extractLeetCodeProblemName = (url: string): string | null => {
 };
 
 const getProblemData = () => {
-  const problemTitle = document.title.replace(" - LeetCode", "").trim();
+  const url = window.location.href;
+  const hostname = window.location.hostname;
+  const title = document.title.trim();
 
-  const problemId = extractLeetCodeProblemName(document.location.href) || "";
-  const problemDescription =
-    document
-      .querySelector("[data-track-load=description_content]")
-      ?.textContent?.trim() || "";
+  if (hostname.includes("leetcode.com")) {
+    const problemTitle = title.replace(" - LeetCode", "");
+    const problemId = extractLeetCodeProblemName(url) || "";
+    const problemDescription = document.querySelector("[data-track-load=description_content]")?.textContent?.trim() || "";
+    const editorElement = document.querySelector("#editor");
 
-  const editorElement = document.querySelector("#editor");
+    const code = editorElement?.querySelector(".view-lines")
+      ? extractCodeWithIndentation(editorElement?.querySelector(".view-lines")?.innerHTML?.trim() || "")
+      : "";
 
-  const code = editorElement?.querySelector(".view-lines")
-    ? extractCodeWithIndentation(
-        editorElement?.querySelector(".view-lines")?.innerHTML?.trim() || ""
-      )
-    : "";
+    const language = editorElement?.querySelector("button")?.textContent?.trim() || "";
+    const difficulty = document.querySelector(".flex.gap-1 > div")?.textContent?.trim() || "";
 
-  const language =
-    editorElement?.querySelector("button")?.textContent?.trim() || "";
-  const problemDifficulty =
-    document
-      .querySelector(
-        ".flexlayout__tab > div > div.flex.w-full.flex-1.flex-col.gap-4.overflow-y-auto.px-4.py-5 > div.flex.gap-1 > div"
-      )
-      ?.textContent?.trim() || "";
+    return {
+      id: problemId,
+      title: problemTitle,
+      content: problemDescription,
+      code,
+      language,
+      difficulty,
+    };
+  }
+
+  if (hostname.includes("codeforces.com")) {
+    const titleEl = document.querySelector(".title")?.textContent?.trim();
+    const statementEl = document.querySelector(".problem-statement")?.textContent?.trim();
+    return {
+      id: titleEl || "codeforces-problem",
+      title: titleEl || "",
+      content: statementEl || "",
+      code: "",
+      language: "C++",
+      difficulty: "",
+    };
+  }
+
+  if (hostname.includes("geeksforgeeks.org")) {
+    const titleEl = document.querySelector(".problem-title")?.textContent?.trim();
+    const statementEl = document.querySelector(".problem-content")?.textContent?.trim();
+    return {
+      id: titleEl || "gfg-problem",
+      title: titleEl || "",
+      content: statementEl || "",
+      code: "",
+      language: "C++",
+      difficulty: "",
+    };
+  }
+
+  if (hostname.includes("codechef.com")) {
+    const titleEl = document.querySelector("h1")?.textContent?.trim();
+    const statementEl = document.querySelector("#problem-statement .content")?.textContent?.trim();
+    return {
+      id: titleEl || "codechef-problem",
+      title: titleEl || "",
+      content: statementEl || "",
+      code: "",
+      language: "C++",
+      difficulty: "",
+    };
+  }
+
+  if (hostname.includes("hackerrank.com")) {
+    const titleEl = document.querySelector(".challenge-name")?.textContent?.trim();
+    const statementEl = document.querySelector(".challenge-body-html")?.textContent?.trim();
+    return {
+      id: titleEl || "hackerrank-problem",
+      title: titleEl || "",
+      content: statementEl || "",
+      code: "",
+      language: "C++",
+      difficulty: "",
+    };
+  }
+
+  if (hostname.includes("atcoder.jp")) {
+    const titleEl = document.querySelector("h2")?.textContent?.trim();
+    const paragraphs = Array.from(document.querySelectorAll(".lang-en .part")).map(p => p.textContent?.trim()).join("\n\n");
+    return {
+      id: titleEl || "atcoder-problem",
+      title: titleEl || "",
+      content: paragraphs || "",
+      code: "",
+      language: "C++",
+      difficulty: "",
+    };
+  }
 
   return {
-    id: problemId,
-    title: problemTitle,
-    content: problemDescription,
-    // code: "",
-    code: code,
-    language,
-    difficulty: problemDifficulty,
+    id: "unknown",
+    title: "Unknown",
+    content: "",
+    code: "",
+    language: "",
+    difficulty: "",
   };
 };
+
 
 const getModel = (modelName: Model, apiKey: string) => {
   if (modelName === "gemini_1.5_flash") {
