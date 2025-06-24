@@ -1,8 +1,8 @@
 {
   "name": "Leetcode Helper Bot",
-  "description": "A browser extension designed to assist users in solving LeetCode problems by providing real-time information and tools.",
+  "description": "A browser extension designed to assist users in solving coding problems by providing real-time information and tools.",
   "manifest_version": 3,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "action": {
     "default_popup": "index.html"
   },
@@ -14,13 +14,44 @@
   },
   "content_scripts": [
     {
-      "js": ["src/content.tsx"],
-      "matches": ["https://leetcode.com/problems/*"]
+      "js": ["src/content-entry.tsx"],
+      "matches": [
+        "https://leetcode.com/problems/*",
+        "https://practice.geeksforgeeks.org/problems/*",
+        "https://www.hackerrank.com/challenges/*",
+        "https://codeforces.com/problemset/problem/*/*",
+        "https://www.codechef.com/problems/*",
+        "https://atcoder.jp/contests/*/tasks/*"
+      ],
+      "css": ["src/index.css"]
     }
   ],
   "background": {
-    "service_worker": "src/background.js"
+    "service_worker": "src/background.js",
+    "type": "module"
   },
   "permissions": ["storage"],
-  "host_permissions": ["https://leetcode.com/*"]
+  "host_permissions": [
+  "https://leetcode.com/*",
+  "https://practice.geeksforgeeks.org/*",
+  "https://www.hackerrank.com/*",
+  "https://codeforces.com/problemset/*",
+  "https://www.codechef.com/*",
+  "https://atcoder.jp/*"
+],
+
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://leetcode.com/*",
+        "https://practice.geeksforgeeks.org/*",
+        "https://www.hackerrank.com/*",
+        "https://codeforces.com/*",
+        "https://www.codechef.com/*",
+        "https://atcoder.jp/*"
+      ],
+      "resources": ["src/*"],
+      "use_dynamic_url": true
+    }
+  ]
 }
