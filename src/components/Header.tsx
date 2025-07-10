@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 // import { FaGithub as GithubIcon } from "react-icons/fa";
 // import ThemeToggle from "./ThemeToggle";
-
 // import { buttonVariants } from "./ui/button";
 
 import {
@@ -23,9 +22,11 @@ const Header: React.FC<Props> = ({ selectedModel, onChangeModel }) => {
     <div className="text-sm p-2 border-b flex items-center justify-between">
       <p className="font-bold px-2 flex items-center gap-2">
         <motion.img
-          layout
           layoutId="icon"
-          src="https://raw.githubusercontent.com/sahilverma-dev/leetcode-helper-extension/refs/heads/main/public/icons/icon128.png"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          src="/icons/icon128.png" // ✅ using local image now
           alt="Leetcode Helper Bot"
           className="w-6 h-6 md:w-8 md:h-8"
         />
@@ -38,13 +39,16 @@ const Header: React.FC<Props> = ({ selectedModel, onChangeModel }) => {
         </SelectTrigger>
         <SelectContent>
           {MODELS.map((model) => (
-            <SelectItem value={model.model}>{model.display}</SelectItem>
+            <SelectItem key={model.model} value={model.model}>
+              {model.display}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>
+
       {/* <div className="flex items-center gap-2">
         <a
-          href="https://github.com/sahilverma-dev/leetcode-helper-extension"
+          href="https://github.com/algoAkshay/leetcode-Assister"
           target="_blank"
           rel="noopener noreferrer"
           className={buttonVariants({
@@ -59,4 +63,5 @@ const Header: React.FC<Props> = ({ selectedModel, onChangeModel }) => {
     </div>
   );
 };
+
 export default Header;

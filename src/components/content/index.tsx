@@ -24,9 +24,11 @@ const Content = () => {
       }
     };
   }, []);
+
   return (
     <AnimatePresence mode="wait">
       {showChat && <ChatBox onClose={() => setShowChat(false)} />}
+
       {!showChat && (
         <Tooltip>
           <TooltipTrigger asChild>
@@ -40,9 +42,8 @@ const Content = () => {
               onClick={() => setShowChat(true)}
             >
               <motion.img
-                layout
                 layoutId="icon"
-                src="https://raw.githubusercontent.com/sahilverma-dev/leetcode-helper-extension/refs/heads/main/public/icons/icon128.png"
+                src="/icons/icon128.png" // ✅ Now using your local icon
                 alt="Leetcode Helper Bot"
                 className="w-6 h-6"
               />
@@ -53,6 +54,7 @@ const Content = () => {
           </TooltipContent>
         </Tooltip>
       )}
+
       {showChat && (
         <motion.button
           className="fixed z-50 bottom-4 right-4 bg-primary text-black p-2 rounded-full aspect-square"
